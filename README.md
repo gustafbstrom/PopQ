@@ -11,9 +11,10 @@ How to add questions?
 Create a new file in the `questions` subdirectory and write a python dictionary on the form:
 
 ```
-foo = {
+#category.txt
+[
     ("My question", "answer")
-}
+]
 ```
 
 The name of the file becomes the category.
