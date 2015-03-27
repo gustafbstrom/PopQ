@@ -52,7 +52,7 @@ if __name__ == "__main__":
     for x in range(0,10):
         try:
             rand_num = int(random.uniform(0,len(Questions)))
-            
+
             while rand_num in checklist:
                     rand_num = int(random.uniform(0, len(Questions)))
 
@@ -61,8 +61,8 @@ if __name__ == "__main__":
             randq = Questions[rand_num]
             print randq[0]
             ans = raw_input("> ")
-            if ans != randq[1]:
-                    print "The answer is: %s" % ", ".join(randq[1:])
+            if ans.lower() != randq[1].lower():
+                    print "The answer is: %s" % randq[1]
                     correct -= 1
         except KeyboardInterrupt:
             os.system("clear")
