@@ -23,17 +23,20 @@ class PopQ(object):
         for filepath in sys.argv[1:]:
             with open(filepath) as fp:
                 print "Opening: ",filepath
-                content = eval( fp.read() )
-                print "Loaded :",len(content)," questions"
-                questions += content
-
+                fp_code = fp.read()
+                if fp_code:
+                    content = eval(fp_code)
+                    print "Loaded :",len(content)," questions"
+                    questions += content
+                else:
+                    print "Error while importing %s" % filepath
         try:
             time.ctime(os.path.getmtime(self.fname))
-            exit(0)
+            exit(0) # Why?
         except OSError as e:
             with file(self.fname, 'a'):
-                    os.utime(self.fname, None)
-                    print "Tempfile stored in %s" % self.fname
+                os.utime(self.fname, None)
+                print "Tempfile stored in %s" % self.fname
 
         lasttime = time.ctime(os.path.getmtime(fname))
         print "last modified: %s" % lasttime
