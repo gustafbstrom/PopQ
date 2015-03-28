@@ -17,6 +17,8 @@ class PopQ(object):
         self.questions = list()
         self.checklist = list()
         self.fname = '/'.join([tempfile.gettempdir(), self.temp_file]) # Touch a file for first use
+        self.n_questions = 0
+        self.total = 1
         
         # Import questions and answers
         if len(sys.argv) < 2:
@@ -29,33 +31,35 @@ class PopQ(object):
                 if fp_code:
                     content = eval(fp_code)
                     print "Loaded :",len(content)," questions"
-                    questions += content
+                    self.questions += content
+                    self.n_questions += len(content)
                 else:
                     print "Error while importing %s" % filepath
         try:
             time.ctime(os.path.getmtime(self.fname))
-            exit(0) # Why?
+            #exit(0) # Why?
         except OSError as e:
             with file(self.fname, 'a'):
                 os.utime(self.fname, None)
                 print "Tempfile stored in %s" % self.fname
 
-        lasttime = time.ctime(os.path.getmtime(fname))
+        lasttime = time.ctime(os.path.getmtime(self.fname))
         print "last modified: %s" % lasttime
 
     def new_questionnaire(self):
         """Start a new questionnaire round"""
-        self.correct = self.__correct
-        for x in range(0, self.__correct):
+        self.correct = min(self.__correct, self.n_questions)
+        self.total = self.correct
+        for x in range(0, min(self.__correct, self.n_questions)):
             try:
-                rand_num = int(random.uniform(0, len(questions)))
+                rand_num = int(random.uniform(0, len(self.questions)))
 
-                while rand_num in checklist:
-                    rand_num = int(random.uniform(0, len(questions)))
+                while rand_num in self.checklist:
+                    rand_num = int(random.uniform(0, len(self.questions)))
 
-                checklist.append(rand_num)
+                self.checklist.append(rand_num)
 
-                randq = questions[rand_num]
+                randq = self.questions[rand_num]
                 print randq[0]
                 ans = raw_input("> ")
                 if ans.lower() != randq[1].lower():
@@ -70,12 +74,13 @@ class PopQ(object):
     
     def __str__(self):
         """Presented score string from latest round"""
-        return "Score: %1.2f %d/%d" % (self.correct/10.*100., self.correct, self.__correct)
+        return "Score: %1.2f%s [%d/%d]" % (float(self.correct)/self.total*100.,\
+            '%', self.correct, self.total)
 
     def print_score(self):
         """Print the core from latest round"""
         os.system("clear")
-        print self.score()
+        print self.__str__()
 
 if __name__ == "__main__":
     Q = PopQ(10)
