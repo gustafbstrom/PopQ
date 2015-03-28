@@ -11,14 +11,14 @@ class Menu(object):
     program_name = 'PopQ'
 
     def __init__(self):
-        self.choices = {'1': self.add_questions, '2': self.start_questionarie, 'x': self.exit_program}
+        self.choices = {'1': self.add_questions, '2': self.start_questionnaire, 'x': self.exit_program}
 
     def add_choices(self):
         '''Add more question files to PopQ'''
         pass
 
-    def start_questionarie(self):
-        '''Start a questionarie session'''
+    def start_questionnaire(self):
+        '''Start a questionnaire session'''
         pass
 
     def exit_program(self):
@@ -39,7 +39,7 @@ class Menu(object):
         print '\n'.join([self.program_name,'-'*len(self.program_name)]) + \
 '''
     1) Choose categories
-    2) Start questionarie
+    2) Start questionnaire
     X) Quit
 '''
     def start_menu_loop(self):
@@ -81,8 +81,8 @@ class PopQ(object):
         lasttime = time.ctime(os.path.getmtime(fname))
         print "last modified: %s" % lasttime
 
-    def new_questionarie(self):
-        """Start a new questionarie round"""
+    def new_questionnaire(self):
+        """Start a new questionnaire round"""
         self.correct = self.__correct
         for x in range(0, self.__correct):
             try:
@@ -117,5 +117,5 @@ class PopQ(object):
 
 if __name__ == "__main__":
     Q = PopQ(10)
-    Q.new_questionarie()
+    Q.new_questionnaire()
     Q.print_score()
