@@ -19,7 +19,13 @@ class PopQ(object):
         self.fname = '/'.join([tempfile.gettempdir(), self.temp_file]) # Touch a file for first use
         self.n_questions = 0
         self.total = 1
-        
+
+        if os.path.isfile('/tmp/'+self.temp_file):
+            exit(1)
+        else:
+            fp = open('/tmp/'+self.temp_file, 'w')
+            fp.close()
+
         # Import questions and answers
         if len(sys.argv) < 2:
             print "Usage: main.py FILES"
