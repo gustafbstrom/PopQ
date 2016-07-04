@@ -24,15 +24,17 @@ class PopQ(object):
         else:
             self.resource_file_path = self.resource_prefix + self.temp_file
 
-    def __init__(self, correct=10):
-
-        self.__correct = correct
-        self.correct = correct
+    def reset(self, num_correct):
+        self._correct = num_correct
         self.questions = list()
         self.checklist = list()
         self.fname = '/'.join([tempfile.gettempdir(), self.temp_file]) # Touch a file for first use
         self.n_questions = 0
         self.total = 1
+
+    def __init__(self, num_correct=10):
+
+        self.reset(num_correct)
 
         parser = argparse.ArgumentParser(description = 'PopQ - TUI pop quiz application')
         parser.add_argument('-q', '--question_files', nargs='+', required = True, type = str)
@@ -67,9 +69,9 @@ class PopQ(object):
 
     def new_questionnaire(self):
         """Start a new questionnaire round"""
-        self.correct = min(self.__correct, self.n_questions)
+        self.correct = min(self._correct, self.n_questions)
         self.total = self.correct
-        for x in range(0, min(self.__correct, self.n_questions)):
+        for x in range(0, min(self._correct, self.n_questions)):
             try:
                 rand_num = int(random.uniform(0, len(self.questions)))
 
@@ -102,6 +104,6 @@ class PopQ(object):
         print self.__str__()
 
 if __name__ == "__main__":
-    Q = PopQ(10)
+    Q = PopQ()
     Q.new_questionnaire()
     Q.print_score()
