@@ -5,13 +5,27 @@ import os
 import time
 import random
 import tempfile
+import argparse
 
 import Menu
 
 class PopQ(object):
+    resource_prefix = '/tmp/'
     temp_file = "popresource.txt"
 
+    def _create_nonexisting_resourcefile(self, resource_file_path):
+        if not os.path.isfile(resource_file_path):
+           open(resource_file_path).close() 
+
+    def _configure_popq(self, args):
+        self.question_files = args.question_files
+        if args.resource_file:
+            self.resource_file_path = args.resource_file
+        else:
+            self.resource_file_path = self.resource_prefix + self.temp_file
+
     def __init__(self, correct=10):
+
         self.__correct = correct
         self.correct = correct
         self.questions = list()
@@ -20,17 +34,16 @@ class PopQ(object):
         self.n_questions = 0
         self.total = 1
 
-        if os.path.isfile('/tmp/'+self.temp_file):
-            exit(1)
-        else:
-            fp = open('/tmp/'+self.temp_file, 'w')
-            fp.close()
+        parser = argparse.ArgumentParser(description = 'PopQ - TUI pop quiz application')
+        parser.add_argument('-q', '--question_files', nargs='+', required = True, type = str)
+        parser.add_argument('-r', '--resource_file', type = str)
+        self._configure_popq(parser.parse_args())
 
-        # Import questions and answers
-        if len(sys.argv) < 2:
-            print "Usage: main.py FILES"
-            sys.exit(1)
-        for filepath in sys.argv[1:]:
+        self._create_nonexisting_resourcefile(self.resource_file_path)
+
+        print("Resource file: " + self.resource_file_path)
+
+        for filepath in self.question_files:
             with open(filepath) as fp:
                 print "Opening: ",filepath
                 fp_code = fp.read()
