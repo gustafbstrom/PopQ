@@ -33,12 +33,12 @@ class Menu(object):
     def print_menu(self):
         '''Print PopQ menu'''
         os.system("clear")
-        print '\n'.join([self.program_name,'-'*len(self.program_name)]) + \
+        print('\n'.join([self.program_name,'-'*len(self.program_name)]) + \
 '''
     1) Choose categories
     2) Start questionnaire
     X) Quit
-'''
+''')
     def start_menu_loop(self):
         '''Create and maintain the menu input/output'''
         pass

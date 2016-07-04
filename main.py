@@ -47,25 +47,25 @@ class PopQ(object):
 
         for filepath in self.question_files:
             with open(filepath) as fp:
-                print "Opening: ",filepath
+                print("Opening: " + filepath)
                 fp_code = fp.read()
                 if fp_code:
                     content = eval(fp_code)
-                    print "Loaded :",len(content)," questions"
+                    print("Loaded :",len(content)," questions")
                     self.questions += content
                     self.n_questions += len(content)
                 else:
-                    print "Error while importing %s" % filepath
+                    print("Error while importing %s" % filepath)
         try:
             time.ctime(os.path.getmtime(self.fname))
             #exit(0) # Why?
         except OSError as e:
             with file(self.fname, 'a'):
                 os.utime(self.fname, None)
-                print "Tempfile stored in %s" % self.fname
+                print("Tempfile stored in %s" % self.fname)
 
         lasttime = time.ctime(os.path.getmtime(self.fname))
-        print "last modified: %s" % lasttime
+        print("last modified: %s" % lasttime)
 
     def new_questionnaire(self):
         """Start a new questionnaire round"""
@@ -81,10 +81,10 @@ class PopQ(object):
                 self.checklist.append(rand_num)
 
                 randq = self.questions[rand_num]
-                print randq[0]
-                ans = raw_input("> ")
+                print(randq[0])
+                ans = input("> ")
                 if ans.lower() != randq[1].lower():
-                    print "The answer is: %s" % randq[1]
+                    print("The answer is: %s" % randq[1])
                     self.correct -= 1
             except KeyboardInterrupt:
                 os.system("clear")
@@ -101,7 +101,7 @@ class PopQ(object):
     def print_score(self):
         """Print the core from latest round"""
         os.system("clear")
-        print self.__str__()
+        print(self.__str__())
 
 if __name__ == "__main__":
     Q = PopQ()
